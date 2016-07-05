@@ -3,6 +3,7 @@ package tree;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Stack;
 
 public class BT {
 	Node root;
@@ -42,6 +43,61 @@ public class BT {
 			
 		}
 	}
+	
+	public void iterativePostOrder(){
+		Node temp = root;
+		Stack<Node> s1 = new Stack<Node>();
+		Stack<Node> s2 = new Stack<Node>();
+		s1.push(temp);
+		while(!s1.isEmpty()){
+			temp = s1.pop();
+			s2.push(temp);
+			if(temp.left != null)
+				s1.push(temp.left);
+			if(temp.right != null)
+				s1.push(temp.right);
+		}
+		while(!s2.isEmpty()){
+			temp = s2.pop();
+			System.out.print(temp.data+ " ");
+		}
+	}
+	
+	public void iterativePreOrder(){
+		Node temp = root;
+		Stack<Node> s1 = new Stack<Node>();
+		if(temp == null)
+			return;
+		s1.push(temp);
+		while(!s1.isEmpty()){
+			temp = s1.pop();
+			System.out.print(temp.data+" ");
+			if(temp.right != null)
+				s1.push(temp.right);
+			if(temp.left != null)
+				s1.push(temp.left);
+			
+		}
+	}
+	
+	public void iterativeInorder(){
+		Node temp = root;
+		if(temp == null)
+			return;
+		Stack<Node> s1 = new Stack<Node>();
+		while(true){
+			if(temp != null){
+				s1.push(temp);
+				temp = temp.left;
+			}else{
+				if(s1.isEmpty()) break;
+				temp = s1.pop();
+				System.out.print(temp.data +" ");
+				temp = temp.right;
+			}
+		}
+		
+	}
 	public void levelorder(){
 		levelorder(root);
 	}
@@ -59,6 +115,7 @@ public class BT {
 				q.add(n.right);
 		}
 	}
+	
 	
 	public void roottoleafsum(){
 		int sum = 0;
@@ -139,5 +196,53 @@ public class BT {
 			postorder(n.right);
 			System.out.print(n.data + " ");
 		}
+	}
+	public void sizeOfBT(){
+		System.out.print(sizeOfBT(root));
+		
+	}
+	public int sizeOfBT(Node root){
+		if(root == null)
+			return 0;
+		int lsize = sizeOfBT(root.left);
+		int rsize = sizeOfBT(root.right);
+		return lsize + rsize + 1;
+	}
+	
+	public void lprint(){
+		lprint(root);
+	}
+	
+	public void lprint(Node n){
+		if(n == null)
+			return;
+		Queue<Node> q1 = new LinkedList<Node>();
+		Queue<Node> q2 = new LinkedList<Node>();
+		Node r = root;
+		Node current;
+		q1.add(r);
+		while(!q1.isEmpty() || !q2.isEmpty()){
+			while(!q1.isEmpty()){
+		current = q1.poll();
+		if(current.left != null)
+			q2.add(current.left);
+		if(current.right != null)
+			q2.add(current.right);
+	
+			System.out.print(current.data + " ");
+			}
+			System.out.println();
+		while(!q2.isEmpty()){
+			current = q2.poll();
+			if(current.left != null)
+				q1.add(current.left);
+			if(current.right != null)
+				q1.add(current.right);
+			System.out.print(current.data + " ");
+		}
+		System.out.println();
+		}
+		
+		
 	}
 }
