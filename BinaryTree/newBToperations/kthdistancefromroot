@@ -1,0 +1,393 @@
+package tree;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Queue;
+import java.util.Stack;
+
+public class BT {
+	Node root;
+	int count;
+	public BT(){
+		root = null;
+		count = 0;
+	}
+	ArrayList<Node> arr = new ArrayList<Node>();
+	
+	
+	public void insert( int d){
+		Node n = new Node(d);
+		if(root == null){
+			root = n;
+			count++;
+			arr.add(root);
+			return;
+		}
+		else {
+			Node temp = root;
+			arr.add(n);
+			for(int i = 0; i < arr.size(); i++) {
+				temp = arr.get(i);
+				if(temp.getLeft() == null){
+					temp.left = n;
+					count++;
+					return;
+				}
+				if(temp.getRight() == null){
+					temp.right = n;
+					count++;
+					return;
+				}
+					
+			}
+			
+		}
+	}
+	
+	public void iterativePostOrder(){
+		Node temp = root;
+		Stack<Node> s1 = new Stack<Node>();
+		Stack<Node> s2 = new Stack<Node>();
+		s1.push(temp);
+		while(!s1.isEmpty()){
+			temp = s1.pop();
+			s2.push(temp);
+			if(temp.left != null)
+				s1.push(temp.left);
+			if(temp.right != null)
+				s1.push(temp.right);
+		}
+		while(!s2.isEmpty()){
+			temp = s2.pop();
+			System.out.print(temp.data+ " ");
+		}
+	}
+	
+	public void iterativePreOrder(){
+		Node temp = root;
+		Stack<Node> s1 = new Stack<Node>();
+		if(temp == null)
+			return;
+		s1.push(temp);
+		while(!s1.isEmpty()){
+			temp = s1.pop();
+			System.out.print(temp.data+" ");
+			if(temp.right != null)
+				s1.push(temp.right);
+			if(temp.left != null)
+				s1.push(temp.left);
+			
+		}
+	}
+	
+	public void iterativeInorder(){
+		Node temp = root;
+		if(temp == null)
+			return;
+		Stack<Node> s1 = new Stack<Node>();
+		while(true){
+			if(temp != null){
+				s1.push(temp);
+				temp = temp.left;
+			}else{
+				if(s1.isEmpty()) break;
+				temp = s1.pop();
+				System.out.print(temp.data +" ");
+				temp = temp.right;
+			}
+		}
+		
+	}
+	public void levelorder(){
+		levelorder(root);
+	}
+	public void levelorder(Node n){
+		if(n == null)
+			return;
+		Queue<Node> q = new LinkedList<Node>();
+		q.add(n);
+		while(!q.isEmpty()){
+			n = q.poll();
+			System.out.print(n.data + " ");
+			if(n.left != null)
+				q.add(n.left);
+			if(n.right != null)
+				q.add(n.right);
+		}
+	}
+	
+	
+	public void roottoleafsum(){
+		int sum = 0;
+		Node temp = root;
+		for(int i = 0; i < arr.size(); i++){
+			temp = arr.get(i);
+			sum = sum + temp.data;
+		}
+		System.out.println("sum is " + sum);
+	}
+	
+	public int height(){
+		int h =height(root);
+		System.out.println(h);
+		return h;
+	}
+	
+	public int height(Node n){
+		if(n == null)
+			return 0;
+		else{
+			int lht = height(n.left);
+			int rht = height(n.right);
+			if(lht > rht)
+				return (lht + 1);
+			else
+				return(rht + 1);
+		}
+	}
+	int getsize(){
+		return count;
+	}
+	
+	public void search(int x){
+		Node temp = root;
+		int flag = 0;
+		for(int i = 0; i < arr.size(); i++){
+			temp = arr.get(i);
+			if(temp.data == x){
+				flag = 1;
+				System.out.println("element found "+temp.data );
+				break;
+			}
+			
+		}
+		if(flag == 0)
+			System.out.println("element not found " );
+	}
+	public void preorder(){
+		preorder(root);
+	}
+	public void preorder(Node n){
+		if(n != null){
+			System.out.print(n.data + " ");
+			preorder(n.left);
+			preorder(n.right);
+			
+		}
+	}
+	
+	public void inorder(){
+		inorder(root);
+	}
+	public void inorder(Node n){
+		if(n != null){
+			inorder(n.left);
+			System.out.print(n.data + " ");
+			inorder(n.right);
+		}
+	}
+
+	public void postorder(){
+		postorder(root);
+	}
+	public void postorder(Node n){
+		if(n != null){
+			postorder(n.left);
+			postorder(n.right);
+			System.out.print(n.data + " ");
+		}
+	}
+	public void sizeOfBT(){
+		System.out.print(sizeOfBT(root));
+		
+	}
+	public int sizeOfBT(Node root){
+		if(root == null)
+			return 0;
+		int lsize = sizeOfBT(root.left);
+		int rsize = sizeOfBT(root.right);
+		return lsize + rsize + 1;
+	}
+	
+	public void lprint(){
+		lprint(root);
+	}
+	
+	public void lprint(Node n){
+
+		if(n == null)
+			return;
+		Queue<Node> q1 = new LinkedList<Node>();
+		Queue<Node> q2 = new LinkedList<Node>();
+		Node r = root;
+		Node current;
+		q1.add(r);
+		while(!q1.isEmpty() || !q2.isEmpty()){
+			while(!q1.isEmpty()){
+		current = q1.poll();
+		if(current.left != null)
+			q2.add(current.left);
+		if(current.right != null)
+			q2.add(current.right);
+	
+			System.out.print(current.data + " ");
+			}
+			System.out.println();
+		while(!q2.isEmpty()){
+			current = q2.poll();
+			if(current.left != null)
+				q1.add(current.left);
+			if(current.right != null)
+				q1.add(current.right);
+			System.out.print(current.data + " ");
+		}
+		System.out.println();
+		}
+		
+		
+	}
+
+	public void reverselevelorder(){
+		reverseorder(root);
+	}
+	public void reverseorder(Node n){
+		if(n == null)
+			return;
+		Stack<Node> s = new Stack<Node>();
+		Queue<Node> q = new LinkedList<Node>();
+		Node current;
+		q.add(n);
+		while(!q.isEmpty()){
+			current = q.poll();
+			if(current.left != null)
+				q.add(current.left);
+			if(current.right != null)
+				q.add(current.right);
+			s.push(current);
+		}
+		Node curr;
+		while(!s.isEmpty()){
+			curr = s.pop();
+			System.out.print(curr.data + " ");
+		}
+	}
+	
+	public void spiralorder(){
+		spiral(root);
+	}
+	public void spiral(Node n){
+		if(n == null)
+			return;
+		Stack<Node> s1 = new Stack<Node>();
+		Stack<Node> s2 = new Stack<Node>();
+		Node current;
+		s1.push(n);
+		while(!s1.isEmpty() || !s2.isEmpty()){
+			
+			while(!s1.isEmpty()){
+				current = s1.pop();
+				System.out.print(current.data + " ");
+				if(current.left != null)
+					s2.push(current.left);
+				if(current.right != null)
+					s2.push(current.right);
+				
+			}
+			while(!s2.isEmpty()){
+				current = s2.pop();
+				System.out.print(current.data+ " ");
+				if(current.right != null)
+					s1.push(current.right);
+				if(current.left != null)
+					s1.push(current.left);
+				
+			}
+		}
+	}
+	
+	public void lowestcommonancestor(int n1, int n2){
+		//System.out.println(lca(root,n1,n2));
+		Node x = lca(root,n1,n2);
+		System.out.println(x.data);
+	}
+	
+	Node lca(Node roo, int n1, int n2){
+		if(roo == null)
+			return null;
+		if(roo.data == n1 || roo.data == n2)
+			return roo;
+		Node la = lca(roo.left, n1,n2);
+		Node ra = lca(roo.right, n1,n2);
+		
+		if(la != null && ra != null)
+			return roo;
+		if(la == null && ra == null)
+			return null;
+		return la != null?la:ra;
+	}
+	
+	public void diameter(){
+		int x = dia(root);
+		System.out.println(x);
+	}
+	
+	int dia(Node n){
+		if(n == null)
+			return 0;
+		int lh = height(n.left);
+		int rh = height(n.right);
+		
+		int ldia = dia(n.left);
+		int rdia = dia(n.right);
+		
+		return Math.max(lh+rh+1,Math.max(ldia, rdia));
+	}
+	
+	public void maximumwidth(){
+		int x = getmaxwidth(root);
+		System.out.println(x);
+	}
+	public int getmaxwidth(Node n){
+		int h = height();
+		int maxwidth = 0;
+		for(int i = 1; i <= h; i++){
+			int y = getwidth(n,i);
+			if(y > maxwidth)
+				maxwidth = y;
+		}
+		return maxwidth;
+	}
+
+	public int getwidth(Node n , int level){
+		if(n == null)
+			return 0;
+		if(level == 1)
+			return 1;
+		else if(level > 1){
+			return getwidth(n.left,level-1) + getwidth(n.right,level-1);
+		
+		}
+		return 0;
+	}
+	
+	public void kthdisatceNode(int k){
+		kthdistance(root,k);
+	}
+	
+	public void kthdistance(Node n, int k){
+		if(n == null)
+			return;
+		if(k == 0){
+			System.out.print(n.data+" ");
+			return;
+		}else{
+			kthdistance(n.left, k-1);
+			kthdistance(n.right, k-1);
+		}
+		
+	}
+	
+
+
+}
+
