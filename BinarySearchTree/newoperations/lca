@@ -1,0 +1,236 @@
+package binaryserachtree;
+
+	public class BST {
+	Node root;
+	BST(){
+		
+	}
+	
+	public Node insert(int key){
+		Node n = new Node(key);
+		if(root == null){
+			root = n;
+		}else{
+		
+		Node current = root,parent=null;
+		while(current != null){
+			parent = current;
+			if(key <= current.data)
+				current = current.left;
+			else
+				current = current.right;
+		}
+		if(parent.data <= key)
+			parent.right = n;
+		else
+			parent.left = n;
+		}
+		return root;
+	}
+
+	public void recinsert(int key){
+		recinsert(root,key);
+	}
+	public Node recinsert(Node root, int key){
+		if(root == null){
+			root = new Node(key);
+			return root;
+		}
+		
+			if(key < root.data)
+				root.left = recinsert(root.left,key);
+			else if(key > root.data)
+				root.right = recinsert(root.right,key);
+		
+		return root;
+	}
+	public void inorder(){
+		
+		inorder(root);
+	}
+	
+	public void inorder(Node n){
+		if(n != null){
+		inorder(n.left);
+		System.out.print(n.data+" ");
+		inorder(n.right);
+		}
+	}
+	
+	public void preorder(){
+		
+		preorder(root);
+	}
+	
+	public void preorder(Node n){
+		if(n != null){
+			System.out.print(n.data+" ");
+		preorder(n.left);
+		
+		preorder(n.right);
+		}
+	}
+	
+	public void postorder(){
+		
+		postorder(root);
+	}
+	
+	public void postorder(Node n){
+		if(n != null){
+			
+		postorder(n.left);
+		
+		postorder(n.right);
+		System.out.print(n.data+" ");
+		}
+	}
+
+	public void searchnode(int key){
+		if(search(root,key) != null)
+			System.out.println("node found");
+		else
+			System.out.println("node not found");
+	}
+	public Node search(Node root,int key){
+		Node current = root;
+		if (current == null)
+			return null;
+		if(current.data == key)
+			return current;
+		else if(current.data <= key)
+			return search(current.right,key);
+		else
+			return search(current.left,key);
+	}
+	public void delete(int key){
+		delete(root,key);
+	}
+	public Node delete(Node root, int key){
+		if(root == null)
+			return root;
+		else if(key < root.data)
+			root.left = delete(root.left,key);
+		else if(key > root.data)
+			root.right = delete(root.right,key);
+		else{
+			//case 1:- no child
+			if(root.left == null && root.right == null){
+				root = null;
+				//return root;
+			}
+			//case 2: only left child is null
+			else if(root.left == null){
+				Node temp = root;
+				root = root.right;
+				temp = null;
+				//return root;
+			}
+			//case 2: only right child is null
+			else if(root.right == null){
+				Node temp = root;
+				root = root.left;
+				temp = null;
+				//return root;
+			}
+			//case 3: 2 child
+			else{
+				Node temp = findmin(root.right);
+				root.data = temp.data;
+				root.right = delete(root.right,temp.data);
+			}
+		}
+		return root;
+	}
+	
+	Node findmin(Node root){
+		Node minv = root;
+		Node temp;
+        while (root.left != null)
+        {
+            minv = root.left;
+            root = root.left;
+            temp = minv;
+        }
+        return minv;
+	}
+	
+	public void getmin(){
+		Node temp =minvalue(root);
+		System.out.println("min is"+temp.data);
+	}
+	Node minvalue(Node root){
+		if(root == null)
+			return null;
+		if(root.left == null && root.right == null)
+			return root;
+		else{
+			root = minvalue(root.left);
+			return root;
+		}
+	}
+	
+	public void presucc(int key){
+		predssuc(root,key);
+	}
+	public void predssuc(Node root, int key){
+		
+		if(root != null){
+			if(root.data == key){
+				if(root.left != null){
+					Node temp = root.left;
+						while(temp.right != null)
+							temp = temp.right;
+								System.out.println("predecor is"+temp.data);
+				}
+			if(root.right != null){
+				Node temp = root.right;
+				while(temp.left != null)
+					temp = temp.left;
+				System.out.println("successcor is"+temp.data);
+			}
+			
+		}
+			else if(key < root.data){
+			System.out.println("successcor is"+root.data);
+			predssuc(root.left,key);
+		}else if(key > root.data){
+			System.out.println("predcesscor is"+root.data);
+			predssuc(root.right,key);
+		}
+	}
+	
+	}
+	
+	public void lca(int n1, int n2){
+		Node temp = lca(root,n1,n2);
+		System.out.println("lca is "+temp.data);
+	}
+	public Node lca(Node root, int n1, int n2){
+		if(root == null)
+			return null;
+		
+			if(root.data > n1 && root.data > n2)
+				return lca(root.left,n1,n2);
+			
+			if(root.data < n1 && root.data < n2)
+				return lca(root.right,n1,n2);
+		return root;	
+//		while (root != null) {
+
+//			if (root.data > n1 && root.data > n2) {
+//				root = root.left;
+//			}
+
+//			else if (root.data <= n1 && root.data < n2) {
+//				root = root.right;
+//			}
+
+//			else {
+//				return root;
+//			}
+//		}
+//		return root;
+		
+	}
+}
